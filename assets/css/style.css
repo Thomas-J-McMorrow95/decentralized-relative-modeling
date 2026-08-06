@@ -264,19 +264,23 @@ a { color: inherit; text-decoration: none; }
    CARD GRID
    ========================================================================= */
 
+/* Three across, stacked cards (thumbnail above the text). Add more documents
+   and they wrap onto further rows of three. */
 .grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  column-gap: 56px;
-  row-gap: 46px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: 40px;
+  row-gap: 52px;
 }
-@media (max-width: 940px) { .grid { grid-template-columns: 1fr; row-gap: 34px; } }
+@media (max-width: 1040px) {
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 32px; row-gap: 44px; }
+}
+@media (max-width: 680px) {
+  .grid { grid-template-columns: 1fr; row-gap: 36px; }
+}
 
 .card {
-  display: grid;
-  grid-template-columns: 220px minmax(0, 1fr);
-  gap: 22px;
-  align-items: start;
+  display: block;
   text-align: left;
   background: none;
   border: 0;
@@ -290,10 +294,12 @@ a { color: inherit; text-decoration: none; }
 
 .card__thumb {
   display: block;
-  aspect-ratio: 220 / 130;
+  width: 100%;
+  aspect-ratio: 16 / 9.2;
   border-radius: 2px;
   overflow: hidden;
   background: var(--grad-1);
+  margin-bottom: 18px;
 }
 .card__thumb svg { width: 100%; height: 100%; }
 
@@ -343,10 +349,24 @@ a { color: inherit; text-decoration: none; }
   color: var(--tag-ink);
 }
 
-@media (max-width: 560px) {
-  .card { grid-template-columns: 1fr; gap: 14px; }
-  .card__thumb { aspect-ratio: 16 / 7; }
+/* --- reserved slot ------------------------------------------------------
+   A placeholder card holds a space in the row for a document that isn't
+   here yet. Not a button, not clickable, no hover. */
+.card--slot { cursor: default; }
+.card--slot .card__thumb {
+  background: none;
+  border: 1px dashed var(--rule);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+.card--slot .card__thumb svg {
+  width: 34px;
+  height: 34px;
+  opacity: .3;
+}
+.card--slot .card__title { color: var(--ink-muted); }
+.card--slot .card__meta  { color: #b3b8bd; }
 
 .empty {
   border: 1px dashed var(--rule);
