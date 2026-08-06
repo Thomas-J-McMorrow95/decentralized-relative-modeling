@@ -1,7 +1,7 @@
-# Your site
+# Decentralized Relative Modeling
 
-Three pages — Documentation, Casual Rosetta, Continuous Tournament — behind an
-IOG-style navigation bar. Documentation shows your PDFs as cards.
+Three pages — Documentation, Casual Rosetta, Continuous Tournament — behind a
+single navigation bar. Documentation shows your PDFs as cards, three across.
 
 You only ever need one command. **You do not need to open any of the code.**
 
@@ -39,7 +39,7 @@ It asks for a site name, sets up the repository, and gives you a public
 address that looks like:
 
 ```
-https://yourusername.github.io/casual-rosetta/
+https://yourusername.github.io/decentralized-relative-modeling/
 ```
 
 The very first deploy takes a few minutes. After that, updates appear within
@@ -91,7 +91,7 @@ labels, and they're the only part you'd touch:
 
 ```js
 const SITE = {
-  brand: { left: "Casual", right: "Rosetta" },
+  brand: { left: "Decentralized Relative Modeling", right: "" },
   pages: [
     { id: "documentation",         label: "Documentation",         href: "index.html" },
     { id: "casual-rosetta",        label: "Casual Rosetta",        href: "casual-rosetta.html" },
