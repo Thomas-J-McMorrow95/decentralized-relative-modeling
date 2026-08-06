@@ -36,11 +36,15 @@
     return month ? month + " " + m[1] : String(value);
   }
 
-  /* Newest first; entries with no date sink to the bottom but keep order. */
+  /* Newest first; entries with no date sink to the bottom but keep order.
+     Reserved slots always sit at the very end. */
   function sortDocs(list) {
     return list
       .map(function (d, i) { return { d: d, i: i }; })
       .sort(function (a, b) {
+        const pa = a.d.placeholder ? 1 : 0;
+        const pb = b.d.placeholder ? 1 : 0;
+        if (pa !== pb) return pa - pb;
         const da = String(a.d.date || "");
         const db = String(b.d.date || "");
         if (da && db && da !== db) return da < db ? 1 : -1;
@@ -55,7 +59,24 @@
   /* rendering                                                             */
   /* -------------------------------------------------------------------- */
 
+  const SLOT_GLYPH =
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">' +
+    '<path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>';
+
+  function slotHTML(doc) {
+    return `
+<div class="card card--slot" aria-hidden="true">
+  <span class="card__thumb">${SLOT_GLYPH}</span>
+  <span class="card__body">
+    <span class="card__title">${esc(doc.title || "Third document")}</span>
+    <span class="card__meta">${esc(doc.note || "Coming soon")}</span>
+  </span>
+</div>`;
+  }
+
   function cardHTML(doc, index) {
+    if (doc.placeholder) return slotHTML(doc);
+
     const authors = Array.isArray(doc.authors) ? doc.authors.join(", ") : (doc.authors || "");
     const date    = prettyDate(doc.date);
     const metaBits = [date, authors].filter(Boolean).join(" — ");
@@ -77,18 +98,21 @@
   }
 
   function render() {
+    /* A tag filter hides the reserved slots — they aren't documents. */
     const list = sortDocs(
-      activeTag ? docs.filter(function (d) { return (d.tags || []).indexOf(activeTag) !== -1; })
-                : docs
+      activeTag
+        ? docs.filter(function (d) {
+            return !d.placeholder && (d.tags || []).indexOf(activeTag) !== -1;
+          })
+        : docs
     );
 
     if (!list.length) {
       grid.classList.remove("grid");
-      grid.innerHTML = docs.length
+      grid.innerHTML = activeTag
         ? `<p class="empty">No documents tagged <strong>#${esc(activeTag)}</strong>.</p>`
-        : `<p class="empty">No documents yet. Drop PDFs into <code>docs/</code> and add an
-           entry for each one in <code>docs/manifest.js</code> — or run
-           <code>python3 tools/rebuild_manifest.py</code> to stub them in automatically.</p>`;
+        : `<p class="empty">No documents yet. Drop PDFs into <code>docs/</code>, then run
+           <code>python3 tools/publish.py</code>.</p>`;
       return;
     }
 
@@ -102,6 +126,7 @@
     if (!filters) return;
     const all = [];
     docs.forEach(function (d) {
+      if (d.placeholder) return;
       (d.tags || []).forEach(function (t) { if (all.indexOf(t) === -1) all.push(t); });
     });
     if (all.length < 2) { filters.hidden = true; return; }
