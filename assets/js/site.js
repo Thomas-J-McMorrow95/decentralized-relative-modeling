@@ -9,7 +9,7 @@
 const SITE = {
   /* Wordmark in the top-left. Split across two spans so the divider between
      them can be styled; set `right` to "" for a single-word brand. */
-  brand: { left: "Casual", right: "Rosetta" },
+  brand: { left: "Decentralized Relative Modeling", right: "" },
 
   /* The tabs, left to right. `id` must match the `data-page` attribute on
      that page's <body>. Add or remove entries here and every page updates. */
