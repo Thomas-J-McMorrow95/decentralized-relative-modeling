@@ -17,6 +17,14 @@
      authors  list of names
      venue    the bold line (journal, conference, version, whatever)
      tags     list of strings, shown as #pills and used by the filter row
+     dag      which of the eight canonical structures to draw. One of:
+              chain, fork, collider, mediator, diamond, instrument,
+              backdoor, cascade. Omit and one is picked from the filename.
+     figure   draw a statistical figure instead of a DAG. One of:
+              didLevels, didLog, didLogit, psOverlap, ipw, lovePlot,
+              simpson, rd, eventStudy, survival, roc, forest, funnel, qq,
+              bootstrap, power, scienceTable, colliderBias, posterior,
+              calibration
 
    A reserved slot holds a space in the row of three for a document that
    isn't ready yet. It has no file, isn't clickable, and is ignored by the
@@ -36,7 +44,8 @@ window.DOCUMENTS =
     "date": "2026-08",
     "authors": ["Thomas J McMorrow"],
     "venue": "Working draft",
-    "tags": ["causal-modeling", "framework"]
+    "tags": ["causal-modeling", "framework"],
+    "dag": "fork"
   },
   {
     "file": "docs/Prerequisite Mathematical Definitions.pdf",
@@ -44,11 +53,13 @@ window.DOCUMENTS =
     "date": "2026-08",
     "authors": ["Thomas J McMorrow"],
     "venue": "Reference document",
-    "tags": ["definitions", "reference"]
+    "tags": ["definitions", "reference"],
+    "dag": "chain"
   },
   {
     "placeholder": true,
     "title": "Continuous Tournament",
-    "note": "In preparation"
+    "note": "In preparation",
+    "dag": "collider"
   }
 ];
