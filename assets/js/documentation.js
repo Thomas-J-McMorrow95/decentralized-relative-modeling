@@ -59,14 +59,30 @@
   /* rendering                                                             */
   /* -------------------------------------------------------------------- */
 
+  /* Card artwork. A document may specify either:
+       "dag":    "collider"        one of the eight canonical structures
+       "figure": "didLevels"       one of the classic statistical figures
+     With neither, a structure is picked deterministically from the filename
+     so the same document always draws the same picture. */
+  function cardArt(doc, index) {
+    if (typeof ART === "undefined") return "";
+    if (doc.figure) return ART.tile("figure", doc.figure, 320, 184);
+    if (doc.dag)    return ART.tile("dag", doc.dag, 320, 184);
+    const names = ART.dagNames;
+    return ART.tile("dag", names[ART.hash(doc.file || doc.title || index) % names.length], 320, 184);
+  }
+
   const SLOT_GLYPH =
     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">' +
     '<path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>';
 
   function slotHTML(doc) {
+    const ghost = (typeof ART !== "undefined" && doc.dag)
+      ? `<span class="card__ghost">${ART.svg(ART.dag(doc.dag, 320, 184, 1), 320, 184)}</span>`
+      : SLOT_GLYPH;
     return `
 <div class="card card--slot" aria-hidden="true">
-  <span class="card__thumb">${SLOT_GLYPH}</span>
+  <span class="card__thumb">${ghost}</span>
   <span class="card__body">
     <span class="card__title">${esc(doc.title || "Third document")}</span>
     <span class="card__meta">${esc(doc.note || "Coming soon")}</span>
@@ -87,7 +103,7 @@
 
     return `
 <button class="card" type="button" data-index="${index}">
-  <span class="card__thumb">${thumbnailSVG(doc.file || doc.title || index)}</span>
+  <span class="card__thumb">${cardArt(doc, index)}</span>
   <span class="card__body">
     <span class="card__title">${esc(doc.title || doc.file || "Untitled")}</span>
     ${metaBits ? `<span class="card__meta">${esc(metaBits)}</span>` : ""}
