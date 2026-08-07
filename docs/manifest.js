@@ -48,7 +48,7 @@ window.DOCUMENTS =
   },
   {
     "placeholder": true,
-    "title": "Third document",
-    "note": "Coming soon"
+    "title": "Continuous Tournament",
+    "note": "In preparation"
   }
 ];
