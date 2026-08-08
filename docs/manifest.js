@@ -39,15 +39,6 @@
 window.DOCUMENTS =
 [
   {
-    "file": "docs/Causal Modeling Framework.pdf",
-    "title": "Causal Modeling Framework",
-    "date": "2026-08",
-    "authors": ["Thomas J McMorrow"],
-    "venue": "Working draft",
-    "tags": ["causal-modeling", "framework"],
-    "dag": "fork"
-  },
-  {
     "file": "docs/Prerequisite Mathematical Definitions.pdf",
     "title": "Prerequisite Mathematical Definitions",
     "date": "2026-08",
@@ -57,9 +48,21 @@ window.DOCUMENTS =
     "dag": "chain"
   },
   {
-    "placeholder": true,
-    "title": "Continuous Tournament",
-    "note": "In preparation",
+    "file": "docs/Causal Modeling Framework.pdf",
+    "title": "Causal Modeling Framework",
+    "date": "2026-08",
+    "authors": ["Thomas J McMorrow"],
+    "venue": "Working draft",
+    "tags": ["causal-modeling", "framework"],
+    "dag": "fork"
+  },
+  {
+    "file": "docs/Continuous Tournament Protocol.pdf",
+    "title": "Continuous Tournament Protocol",
+    "date": "2026-08",
+    "authors": ["Thomas J McMorrow"],
+    "venue": "Working draft",
+    "tags": ["tournament", "protocol"],
     "dag": "collider"
   }
 ];
