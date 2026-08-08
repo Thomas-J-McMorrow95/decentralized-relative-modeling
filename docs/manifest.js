@@ -43,7 +43,7 @@ window.DOCUMENTS =
     "title": "Prerequisite Mathematical Definitions",
     "date": "2026-08",
     "authors": ["Thomas J McMorrow"],
-    "venue": "Reference document",
+    "venue": "Working draft",
     "tags": ["definitions", "reference"],
     "dag": "chain"
   },
