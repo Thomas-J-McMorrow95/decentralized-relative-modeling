@@ -134,6 +134,7 @@ assets/js/site.js             site name, tabs, and the generated artwork
 assets/js/documentation.js    the card grid and the PDF viewer
 docs/manifest.js              your document list (the script writes this)
 tools/publish.py              the command above
+CLAUDE.md                     notes for Claude, not for you
 ```
 
 A few decisions in here that will look odd until you know why:
@@ -153,3 +154,8 @@ A few decisions in here that will look odd until you know why:
 - **Documents are deep-linkable**: opening one sets
   `#doc=docs/your-file.pdf` in the address bar, so you can share a link
   straight to it.
+- **Stylesheet and script links carry a `?v=…`.** GitHub Pages tells browsers
+  to hold on to those files for ten minutes, so a publish can look like
+  nothing happened. `publish.py` writes a short hash of each file into its
+  link, so the address changes exactly when the file does and the browser
+  fetches it again. It maintains those itself; you never type them.

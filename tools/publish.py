@@ -16,6 +16,7 @@ Useful flags:
 """
 
 import argparse
+import hashlib
 import json
 import os
 import re
@@ -391,6 +392,53 @@ def first_run():
 
 
 # --------------------------------------------------------------------------
+# cache stamps
+# --------------------------------------------------------------------------
+
+PAGES = ["index.html", "casual-rosetta.html", "continuous-tournament.html"]
+
+# href="…" or src="…" pointing at one of our own stylesheets or scripts,
+# with or without a ?v=… left over from a previous run.
+STAMPABLE = re.compile(
+    r'((?:href|src)=")((?:assets/|docs/)[^"?#]+\.(?:css|js))(\?v=[0-9a-f]+)?(")'
+)
+
+
+def stamp_assets():
+    """Put a short hash of each stylesheet and script into the link that
+    points at it.
+
+    GitHub Pages tells browsers to keep hold of these files for ten minutes.
+    Without this, publishing a change to style.css or manifest.js leaves
+    anyone who visited recently — you included — looking at the old version,
+    and the site appears not to have updated at all. Because the hash is taken
+    from the file's contents, the address changes exactly when the file does:
+    a changed file is fetched again, an unchanged one still comes from the
+    cache."""
+    touched = []
+    for name in PAGES:
+        page = ROOT / name
+        if not page.exists():
+            continue
+        text = page.read_text(encoding="utf-8")
+
+        def stamp(m):
+            asset = ROOT / m.group(2)
+            if not asset.exists():
+                return m.group(0)          # not ours to stamp; leave it be
+            digest = hashlib.md5(asset.read_bytes()).hexdigest()[:8]
+            return f"{m.group(1)}{m.group(2)}?v={digest}{m.group(4)}"
+
+        stamped = STAMPABLE.sub(stamp, text)
+        if stamped != text:
+            page.write_text(stamped, encoding="utf-8")
+            touched.append(name)
+
+    if touched:
+        say(dim(f"Cache stamps refreshed in {', '.join(touched)}."))
+
+
+# --------------------------------------------------------------------------
 
 def preview():
     import http.server
@@ -445,6 +493,8 @@ def main():
     entries, changed = sync_documents(entries, assume_yes=args.yes)
     if changed:
         write_manifest(entries, header)
+
+    stamp_assets()
 
     say()
     if args.no_push:
