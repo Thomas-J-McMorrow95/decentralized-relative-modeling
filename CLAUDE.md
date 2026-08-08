@@ -27,6 +27,22 @@ Use `git --no-optional-locks ...` for everything. It never takes the lock.
 If a lock does get stranded, `rm` will not remove it. Move it aside with
 `mv .git/index.lock .git/index.lock.dead` and tell the user to delete it.
 
+Writing commands are worse. A `git add` / `commit` / `rm --cached` run from
+here does work, but leaves `.git/HEAD.lock`, `.git/objects/maintenance.lock`
+and a scatter of `.git/objects/**/tmp_obj_*` behind, and `HEAD.lock` blocks
+the user's next commit outright. If you are given explicit permission to
+commit, sweep afterwards:
+
+    find .git -maxdepth 3 -name "*.lock" -print0 |
+      while IFS= read -r -d '' f; do mv "$f" "$f.dead-claude"; done
+
+The `tmp_obj_*` files cannot be removed from here. They are inert; `git gc`
+on the user's machine clears them.
+
+Pushing is not possible at all: the VM's outbound proxy answers CONNECT to
+github.com with HTTP 403. Commit if asked, then hand `git push origin main`
+back to the user.
+
 ## `git status` misreports modifications
 
 Every tracked file shows as modified. `git diff -w` comes back empty, so the
