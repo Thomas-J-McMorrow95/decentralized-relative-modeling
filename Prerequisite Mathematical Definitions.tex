@@ -1,0 +1,388 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amssymb, amsthm, mathtools, hyperref, enumitem, booktabs}
+\usepackage[margin=1in]{geometry}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, calc}
+\usepackage[most]{tcolorbox}
+\newtcolorbox{pitfall}[1][]{colback=red!2, colframe=red!45!black,
+    fonttitle=\bfseries, coltitle=red!45!black, colbacktitle=red!2, title={Pitfall: #1},
+    sharp corners, boxrule=0.6pt, left=6pt, right=6pt, top=4pt, bottom=4pt}
+
+\newtheorem{proposition}{Proposition}
+\newtheorem{corollary}[proposition]{Corollary}
+\newtheorem{theorem}[proposition]{Theorem}
+\newtheorem{lemma}[proposition]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[proposition]{Definition}
+\newtheorem{condition}[proposition]{Condition}
+\theoremstyle{remark}
+\newtheorem{remark}[proposition]{Remark}
+\newtheorem{example}[proposition]{Example}
+
+\title{Prerequisite Mathematical Definitions}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\end{abstract}
+
+\newpage
+\section{Transition Independence}
+\label{transitionindependence}
+
+\paragraph{Setting.} We consider functions $f \colon S_1 \times \cdots \times S_n \to T$, where the factor sets $S_i$ and the codomain $T$ carry no assumed structure unless otherwise noted. We write $\boldsymbol{a}|_{a_i = a_i'}$ for the tuple identical to $\boldsymbol{a}$ except that the $i$-th component is replaced by $a_i'$, and write
+\[
+\mathcal{D}_i \coloneqq\{(f(\boldsymbol{a}),\, a_i) : \boldsymbol{a} \in S_1 \times \cdots \times S_n\} \subseteq T \times S_i
+\]
+for the joint range of $(f, \mathrm{pr}_i)$ --- the set of $(v, a_i)$ pairs realized by some $\boldsymbol{a}$. The auxiliary functions introduced in the conditions below are defined on $\mathcal{D}_i$ (or $\mathcal{D}_i \times S_i$).
+
+We introduce three formulations of transition independence forming a hierarchy of decreasing generality: the \textit{transition-map} condition requires no structure on $T$; the \textit{finite-difference} condition requires that $(T, +)$ be an abelian group, so that subtraction is defined; and the \textit{derivative} condition requires that $T$ be a normed vector space, $f$ be differentiable in $s_i$, and suitable regularity conditions hold. Each formulation is stated at its natural level of generality.
+
+\paragraph{Transition map.} The variable $s_i$ is \textit{transition-independent} of the remaining variables $\boldsymbol{s}_{j \neq i}$ with respect to $f$ iff there exists a \textit{transition map} $H_i \colon \mathcal{D}_i \times S_i \to T$ (necessarily unique on its declared domain) such that
+\begin{equation}
+\label{transportmap}
+\forall\, \boldsymbol{a} \in S_1 \times \cdots \times S_n,\;\; \forall\, a_i' \in S_i \quad
+f(\boldsymbol{a}|_{a_i = a_i'}) = H_i\bigl(f(\boldsymbol{a}),\, a_i,\, a_i'\bigr).
+\end{equation}
+The non-trivial content of the condition is that the remaining coordinates $\boldsymbol{a}_{j \neq i}$ are dropped in favor of the output $f(\boldsymbol{a})$. No structure on $T$ is required: the condition is meaningful for functions valued in discrete spaces, ordered sets, manifolds, or any other codomain. For $H_i$ to be well-defined as a function on $\mathcal{D}_i \times S_i$, the following consistency condition is necessary and sufficient.
+
+\begin{remark}[Output-determinacy]
+\label{outputdeterminacy}
+For every $\boldsymbol{a}, \boldsymbol{b} \in S_1 \times \cdots \times S_n$, if $f(\boldsymbol{a}) = f(\boldsymbol{b})$ and $a_i = b_i$, then $f(\boldsymbol{a}|_{a_i = a_i'}) = f(\boldsymbol{b}|_{b_i = a_i'})$ for every $a_i' \in S_i$.
+\end{remark}
+
+\noindent \textit{Proof of the equivalence.} ($\Rightarrow$) If $H_i$ satisfies (\ref{transportmap}) and $f(\boldsymbol{a}) = f(\boldsymbol{b})$ with $a_i = b_i$, then $f(\boldsymbol{a}|_{a_i = a_i'}) = H_i(f(\boldsymbol{a}), a_i, a_i') = H_i(f(\boldsymbol{b}), b_i, a_i') = f(\boldsymbol{b}|_{b_i = a_i'})$. ($\Leftarrow$) Given output-determinacy, define $H_i(v, s, a_i') := f(\boldsymbol{a}|_{a_i = a_i'})$ for any $\boldsymbol{a}$ with $f(\boldsymbol{a}) = v$ and $a_i = s$; output-determinacy makes the choice of $\boldsymbol{a}$ immaterial, so $H_i$ is well-defined and (\ref{transportmap}) holds by construction.
+
+\noindent Geometrically, output-determinacy says that the level sets of $f$ do not ``twist'' along the $s_i$-direction: two points sharing both the same output and the same $i$-th coordinate must land on the same level set as each other --- in general a different one from where they started --- when $s_i$ is varied. In full generality, the condition asserts that the pair $(f(\boldsymbol{a}), a_i)$ is a sufficient representation for predicting how $f$ responds to movement of $s_i$.
+
+\paragraph{Finite-difference formulation.} When $(T, +)$ is an abelian group, the transition-map condition has an equivalent algebraic formulation: there exists $G_i \colon \mathcal{D}_i \times S_i \to T$ such that
+\begin{equation}
+\label{finitedifference}
+\forall\, \boldsymbol{a} \in S_1 \times \cdots \times S_n,\;\; \forall\, a_i' \in S_i \quad
+f(\boldsymbol{a}|_{a_i = a_i'}) - f(\boldsymbol{a}) = G_i\bigl(f(\boldsymbol{a}),\, a_i,\, a_i'\bigr).
+\end{equation}
+The two formulations are related by $G_i(v, a_i, a_i') = H_i(v, a_i, a_i') - v$ and $H_i(v, a_i, a_i') = v + G_i(v, a_i, a_i')$.
+
+\paragraph{Derivative formulation.} Suppose $S_i$ is an open interval of $\mathbb{R}$ and $T$ is a normed vector space. When $f$ is differentiable in $s_i$, under appropriate regularity conditions, the derivative condition is: there exists $F_i \colon \mathcal{D}_i \to T$ such that
+\begin{equation}
+\label{derivative}
+\forall\, \boldsymbol{a} \in S_1 \times \cdots \times S_n \quad
+\frac{\partial f(\boldsymbol{s})}{\partial s_i}\bigg|_{\boldsymbol{s} = \boldsymbol{a}} = F_i\bigl(f(\boldsymbol{a}),\, a_i\bigr).
+\end{equation}
+When (\ref{derivative}) holds, the map $t \mapsto f(\boldsymbol{a}|_{a_i = t})$ satisfies the initial value problem
+\begin{equation}
+\label{odeform}
+\frac{dy}{dt} = F_i(y, t), \qquad y(a_i) = f(\boldsymbol{a}),
+\end{equation}
+whose solution determines $f(\boldsymbol{a}|_{a_i = a_i'})$ entirely from $(f(\boldsymbol{a}), a_i)$ provided the solution is unique. The ODE (\ref{odeform}) is the bridge between the derivative condition and the transition map.
+
+\paragraph{Summary of equivalences.} The relationships among (\ref{transportmap}), (\ref{finitedifference}), and (\ref{derivative}) can be summarized as follows:
+\begin{enumerate}[label=(\alph*)]
+\item Condition (\ref{transportmap}) is equivalent to output-determinacy (Remark \ref{outputdeterminacy}). No structure on $T$ is required.
+\item If $(T, +)$ is an abelian group, conditions (\ref{transportmap}) and (\ref{finitedifference}) are equivalent via $H_i(v, a_i, a_i') = v + G_i(v, a_i, a_i')$ and $G_i(v, a_i, a_i') = H_i(v, a_i, a_i') - v$.
+\item Suppose $S_i$ is an open interval of $\mathbb{R}$, $T$ is a normed vector space, and $f$ is differentiable in $s_i$ throughout. Then (\ref{transportmap}) $\Rightarrow$ (\ref{derivative}) holds, via $F_i(v, a_i) := \partial_{a_i'} H_i(v, a_i, a_i')\big|_{a_i' = a_i}$. The reverse direction (\ref{derivative}) $\Rightarrow$ (\ref{transportmap}) holds provided the IVP (\ref{odeform}) admits a unique solution from each initial datum $(v, a_i) \in \mathcal{D}_i$. Under these hypotheses all three formulations are equivalent. The trajectory $t \mapsto f(\boldsymbol{a}|_{a_i = t})$ solves the initial value problem
+\[
+\frac{dy}{dt} = F_i(y, t), \qquad y(a_i) = f(\boldsymbol{a}),
+\]
+and, provided the integrand below is integrable --- for instance when $f$ is continuously differentiable in $s_i$ --- the finite-difference and derivative formulations are related by
+\begin{equation}
+\label{integralform}
+G_i\bigl(f(\boldsymbol{a}), a_i, a_i'\bigr) = \int_{a_i}^{a_i'} F_i\bigl(f(\boldsymbol{a}|_{a_i = t}),\, t\bigr)\, dt.
+\end{equation}
+\end{enumerate}
+
+\newpage
+
+\section{Sufficient Context and Context Bases}
+\label{contextbases}
+
+\paragraph{Setting.} Transition independence may be partial: $s_i$ might be transition-independent of some variables, with the others retained as its \textit{context}, without being fully independent. We formalize this by partitioning $\{1, \ldots, n\}$ as $\{i\} \cup J \cup K$, where $J$ is the context and $K = \{1, \ldots, n\} \setminus (\{i\} \cup J)$ contains the remaining variables. The variable $s_i$ is \textit{transition-independent of $\boldsymbol{s}_K$ given context $\boldsymbol{s}_J$} if the equations of Section~\ref{transitionindependence} hold when the auxiliary maps $H_{i,J}$, $G_{i,J}$, or $F_{i,J}$ are allowed to depend on the context values $\boldsymbol{a}_J$. Each of the three formulations of Section~\ref{transitionindependence} extends to this conditional setting.
+
+\paragraph{Transition-map formulation (no structure on $T$).} The variable $s_i$ is transition-independent of $\boldsymbol{s}_K$ given context $\boldsymbol{s}_J$ iff there exists a map $H_{i,J} \colon \mathcal{D}_i^J \times S_i \to T$ (denoted $H_{i,J}(f(\boldsymbol{a}), a_i, a_i', \boldsymbol{a}_J)$, with the target $a_i'$ written before the context $\boldsymbol{a}_J$) such that
+\begin{equation}
+\label{contexttransportmap}
+\forall\, \boldsymbol{a} \in S_1 \times \cdots \times S_n,\;\; \forall\, a_i' \in S_i \quad
+f(\boldsymbol{a}|_{a_i = a_i'}) = H_{i,J}\bigl(f(\boldsymbol{a}),\, a_i,\, a_i',\, \boldsymbol{a}_J\bigr),
+\end{equation}
+where $\mathcal{D}_i^J \coloneqq\{(f(\boldsymbol{a}),\, a_i,\, \boldsymbol{a}_J) : \boldsymbol{a} \in S_1 \times \cdots \times S_n\}$. Setting $J = \emptyset$ recovers (\ref{transportmap}); setting $J = \{1,\ldots,n\} \setminus \{i\}$ holds trivially.
+
+\begin{remark}[Output-determinacy on context $J$]
+\label{contextoutputdeterminacy}
+For every $\boldsymbol{a}, \boldsymbol{b} \in S_1 \times \cdots \times S_n$, if $f(\boldsymbol{a}) = f(\boldsymbol{b})$, $a_i = b_i$, and $\boldsymbol{a}_J = \boldsymbol{b}_J$, then $f(\boldsymbol{a}|_{a_i = a_i'}) = f(\boldsymbol{b}|_{b_i = a_i'})$ for every $a_i' \in S_i$.
+\end{remark}
+
+\noindent As in the full case, output-determinacy on context $J$ is necessary and sufficient for $H_{i,J}$ to be well-defined on $\mathcal{D}_i^J \times S_i$. Setting $J = \emptyset$ recovers Remark~\ref{outputdeterminacy}.
+
+\medskip
+
+\noindent Geometrically, this is still essentially the no-twist condition of Section~\ref{transitionindependence}, now imposed within each context slice: with $\boldsymbol{s}_J$ fixed, the level sets of $f$ do not ``twist'' along the $s_i$-direction.
+
+\begin{remark}[Partial-function form]
+\label{contextpartialform}
+For every $\boldsymbol{c}_J \in \prod_{j \in J} S_j$, the variable $s_i$ is fully transition-independent on the partial function $f|_{\boldsymbol{s}_J = \boldsymbol{c}_J} \colon \prod_{m \in \{i\} \cup K} S_m \to T$, in the sense of Section~\ref{transitionindependence}.
+\end{remark}
+
+\noindent Remark~\ref{contextpartialform} is equivalent to $s_i$ being transition-independent of $\boldsymbol{s}_K$ given context $\boldsymbol{s}_J$: since $\boldsymbol{a}|_{a_i = a_i'}$ fixes $\boldsymbol{a}_J$, the map $H_{i,J}(\,\cdot\,, \boldsymbol{a}_J)$ is the transition map of $f|_{\boldsymbol{s}_J = \boldsymbol{c}_J}$.
+
+\medskip
+
+\noindent In other words, partial transition independence is full transition independence on sets of partial functions. Context is what's fixed.
+
+\paragraph{Finite-difference formulation (abelian $T$).} When $(T, +)$ is an abelian group, the condition has the equivalent algebraic form: there exists $G_{i,J} \colon \mathcal{D}_i^J \times S_i \to T$ such that
+\begin{equation}
+\label{contextfinitedifference}
+\forall\, \boldsymbol{a} \in S_1 \times \cdots \times S_n,\;\; \forall\, a_i' \in S_i \quad
+f(\boldsymbol{a}|_{a_i = a_i'}) - f(\boldsymbol{a}) = G_{i,J}\bigl(f(\boldsymbol{a}),\, a_i,\, a_i',\, \boldsymbol{a}_J\bigr).
+\end{equation}
+The two formulations are related by $G_{i,J}(v, a_i, a_i', \boldsymbol{a}_J) = H_{i,J}(v, a_i, a_i', \boldsymbol{a}_J) - v$ and $H_{i,J}(v, a_i, a_i', \boldsymbol{a}_J) = v + G_{i,J}(v, a_i, a_i', \boldsymbol{a}_J)$.
+
+\paragraph{Derivative formulation ($S_i$ real, $T$ normed).} Suppose $S_i$ is an open interval of $\mathbb{R}$ and $T$ is a normed vector space. When $f$ is differentiable in $s_i$, under appropriate regularity conditions, the condition becomes: there exists $F_{i,J} \colon \mathcal{D}_i^J \to T$ such that
+\begin{equation}
+\label{contextderivative}
+\forall\, \boldsymbol{a} \in S_1 \times \cdots \times S_n \quad
+\frac{\partial f(\boldsymbol{s})}{\partial s_i}\bigg|_{\boldsymbol{s} = \boldsymbol{a}} = F_{i,J}\bigl(f(\boldsymbol{a}),\, a_i,\, \boldsymbol{a}_J\bigr).
+\end{equation}
+When (\ref{contextderivative}) holds, the map $t \mapsto f(\boldsymbol{a}|_{a_i = t})$ satisfies the initial value problem
+\begin{equation}
+\label{contextodeform}
+\frac{dy}{dt} = F_{i,J}(y, t, \boldsymbol{a}_J), \qquad y(a_i) = f(\boldsymbol{a}),
+\end{equation}
+whose solution determines $f(\boldsymbol{a}|_{a_i = a_i'})$ entirely from $(f(\boldsymbol{a}), a_i, \boldsymbol{a}_J)$ provided the solution is unique. The ODE (\ref{contextodeform}) is the bridge between the derivative condition and the transition map.
+
+\paragraph{Summary of equivalences.} The relationships among (\ref{contexttransportmap}), (\ref{contextfinitedifference}), and (\ref{contextderivative}) parallel those of Section~\ref{transitionindependence}, with the context tuple $\boldsymbol{a}_J$ entering each auxiliary map as a passenger argument:
+\begin{enumerate}[label=(\alph*)]
+\item Condition (\ref{contexttransportmap}) is equivalent to output-determinacy on context $J$ (Remark \ref{contextoutputdeterminacy}). No structure on $T$ is required.
+\item If $(T, +)$ is an abelian group, conditions (\ref{contexttransportmap}) and (\ref{contextfinitedifference}) are equivalent via $H_{i,J}(v, a_i, a_i', \boldsymbol{a}_J) = v + G_{i,J}(v, a_i, a_i', \boldsymbol{a}_J)$ and $G_{i,J}(v, a_i, a_i', \boldsymbol{a}_J) = H_{i,J}(v, a_i, a_i', \boldsymbol{a}_J) - v$.
+\item Suppose $S_i$ is an open interval of $\mathbb{R}$, $T$ is a normed vector space, and $f$ is differentiable in $s_i$ throughout. Then (\ref{contexttransportmap}) $\Rightarrow$ (\ref{contextderivative}) holds. The reverse direction (\ref{contextderivative}) $\Rightarrow$ (\ref{contexttransportmap}) holds provided the IVP (\ref{contextodeform}) admits a unique solution from each initial datum. Under these hypotheses all three formulations are equivalent. The trajectory $t \mapsto f(\boldsymbol{a}|_{a_i = t})$ solves the initial value problem
+\[
+\frac{dy}{dt} = F_{i,J}(y, t, \boldsymbol{a}_J), \qquad y(a_i) = f(\boldsymbol{a}),
+\]
+and, provided the integrand below is integrable --- for instance when $f$ is continuously differentiable in $s_i$ --- the finite-difference and derivative formulations are related by
+\begin{equation}
+\label{contextintegralform}
+G_{i,J}\bigl(f(\boldsymbol{a}), a_i, a_i', \boldsymbol{a}_J\bigr) = \int_{a_i}^{a_i'} F_{i,J}\bigl(f(\boldsymbol{a}|_{a_i = t}),\, t,\, \boldsymbol{a}_J\bigr)\, dt.
+\end{equation}
+\end{enumerate}
+From now on we work with the transition-map version (\ref{contexttransportmap}).
+% [Section 2 --- assembly in progress; further blocks not yet added]
+
+
+\newpage
+
+\section{Transform Independence}
+\label{transformindependence}
+
+\paragraph{Setting.} Sections~\ref{transitionindependence} and~\ref{contextbases} describe the change in a variable by its initial and final values. This section describes it by a transform carrying the initial value to the final one. Fix a coordinate $i$, and let $\Delta_i$ be a \textit{family} of \textit{transforms} of $S_i$: each $\delta_i \in \Delta_i$ is a map $\delta_i \colon S_i \to S_i$, and we write $\delta_i \ast a_i$ for $\delta_i(a_i)$, so that the substitution of $a_i'$ for $a_i$ is \textit{represented} by a transform $\delta_i$ if $a_i' = \delta_i \ast a_i$. No structure on the family is assumed; in particular $\Delta_i$ need not be closed under composition. We write
+\[
+\mathcal{E}_i \coloneqq\{(f(\boldsymbol{a}),\, \delta_i) : \boldsymbol{a} \in S_1 \times \cdots \times S_n,\; \delta_i \in \Delta_i\} = f(S_1 \times \cdots \times S_n) \times \Delta_i
+\]
+for the product of the range of $f$ with the family --- the value and the transform do not constrain each other, since $\delta_i$ is chosen independently of $\boldsymbol{a}$. The auxiliary functions introduced in the conditions below are defined on $\mathcal{E}_i$: they consult the transform applied, not the initial value $a_i$ or the final value $a_i'$.
+
+\paragraph{Transform-map formulation (no structure on $T$).} The variable $s_i$ is \textit{transform-independent} of the remaining variables $\boldsymbol{s}_{j \neq i}$ and of its own initial value with respect to $f$ and $\Delta_i$ iff there exists a \textit{transform map} $H_i^\Delta \colon \mathcal{E}_i \to T$ (necessarily unique on its declared domain) such that
+\begin{equation}
+\label{deltatransformmap}
+\forall\, \boldsymbol{a} \in S_1 \times \cdots \times S_n,\;\; \forall\, \delta_i \in \Delta_i \quad
+f(\boldsymbol{a}|_{a_i = \delta_i \ast a_i}) = H_i^\Delta\bigl(f(\boldsymbol{a}),\, \delta_i\bigr).
+\end{equation}
+The non-trivial content of the condition is that the remaining coordinates $\boldsymbol{a}_{j \neq i}$ and the initial value $a_i$ are both dropped in favor of the output $f(\boldsymbol{a})$ and the transform $\delta_i$ alone. For $H_i^\Delta$ to be well-defined as a function on $\mathcal{E}_i$, the following consistency condition is necessary and sufficient.
+
+\begin{remark}[Transform output-determinacy]
+\label{transformoutputdeterminacy}
+For every $\boldsymbol{a}, \boldsymbol{b} \in S_1 \times \cdots \times S_n$, if $f(\boldsymbol{a}) = f(\boldsymbol{b})$, then $f(\boldsymbol{a}|_{a_i = \delta_i \ast a_i}) = f(\boldsymbol{b}|_{b_i = \delta_i \ast b_i})$ for every $\delta_i \in \Delta_i$.
+\end{remark}
+
+\noindent \textit{Proof of the equivalence.} ($\Rightarrow$) If $H_i^\Delta$ satisfies (\ref{deltatransformmap}) and $f(\boldsymbol{a}) = f(\boldsymbol{b})$, then $f(\boldsymbol{a}|_{a_i = \delta_i \ast a_i}) = H_i^\Delta(f(\boldsymbol{a}), \delta_i) = H_i^\Delta(f(\boldsymbol{b}), \delta_i) = f(\boldsymbol{b}|_{b_i = \delta_i \ast b_i})$ for every $\delta_i \in \Delta_i$. ($\Leftarrow$) Given transform output-determinacy, define $H_i^\Delta(v, \delta_i) := f(\boldsymbol{a}|_{a_i = \delta_i \ast a_i})$ for any $\boldsymbol{a}$ with $f(\boldsymbol{a}) = v$; the condition makes the choice of $\boldsymbol{a}$ immaterial, so $H_i^\Delta$ is well-defined and (\ref{deltatransformmap}) holds by construction.
+
+\noindent Transform output-determinacy says that two tuples sharing the same output must respond identically to each other under every transform in $\Delta_i$, whatever their initial values. Over the substitutions that $\Delta_i$ represents, ordinary output-determinacy (Remark~\ref{outputdeterminacy}) makes that same demand, but only of tuples that also share an initial value: for those, the transform applied and the final value describe the same substitution. Geometrically, the condition says that applying a transform $\delta_i$ to the $i$-th coordinate carries every level set of $f$ into a single level set --- in general a different one --- and so descends along $f$ to the induced map $v \mapsto H_i^\Delta(v, \delta_i)$ on the range of $f$. In full generality, the condition asserts that the output $f(\boldsymbol{a})$ alone is a sufficient representation for predicting how $f$ responds to each transform in $\Delta_i$.
+
+\paragraph{Finite-difference formulation (abelian $T$).} When $(T, +)$ is an abelian group, the transform-map condition has an equivalent algebraic formulation: there exists $G_i^\Delta \colon \mathcal{E}_i \to T$ such that
+\begin{equation}
+\label{transformfinitedifference}
+\forall\, \boldsymbol{a} \in S_1 \times \cdots \times S_n,\;\; \forall\, \delta_i \in \Delta_i \quad
+f(\boldsymbol{a}|_{a_i = \delta_i \ast a_i}) - f(\boldsymbol{a}) = G_i^\Delta\bigl(f(\boldsymbol{a}),\, \delta_i\bigr).
+\end{equation}
+The two formulations are related by $G_i^\Delta(v, \delta_i) = H_i^\Delta(v, \delta_i) - v$ and $H_i^\Delta(v, \delta_i) = v + G_i^\Delta(v, \delta_i)$. No derivative (instantaneous) formulation is included; the two formulations above are the only ones we use.
+
+\paragraph{Summary of equivalences.} The relationships between (\ref{deltatransformmap}) and (\ref{transformfinitedifference}) parallel items (a) and (b) of Section~\ref{transitionindependence}, with the pair $(f(\boldsymbol{a}),\, \delta_i)$ replacing $(f(\boldsymbol{a}),\, a_i,\, a_i')$ throughout:
+\begin{enumerate}[label=(\alph*)]
+\item Condition (\ref{deltatransformmap}) is equivalent to transform output-determinacy (Remark \ref{transformoutputdeterminacy}). No structure on $T$ is required.
+\item If $(T, +)$ is an abelian group, conditions (\ref{deltatransformmap}) and (\ref{transformfinitedifference}) are equivalent via $H_i^\Delta(v, \delta_i) = v + G_i^\Delta(v, \delta_i)$ and $G_i^\Delta(v, \delta_i) = H_i^\Delta(v, \delta_i) - v$.
+\end{enumerate}
+
+\begin{remark}[Keeping the initial value]
+\label{keepinitialvalue}
+Passing from the transition-map condition (\ref{transportmap}) to the transform-map condition (\ref{deltatransformmap}) replaces the pair $(a_i, a_i')$ with the transform $\delta_i$ alone. If we replaced it instead with the pair $(a_i, \delta_i)$ --- the initial value kept --- the condition would read: there exists $H \colon \mathcal{D}_i \times \Delta_i \to T$ (necessarily unique on its declared domain) such that
+\begin{equation}
+\label{initialvaluekept}
+\forall\, \boldsymbol{a} \in S_1 \times \cdots \times S_n,\;\; \forall\, \delta_i \in \Delta_i \quad
+f(\boldsymbol{a}|_{a_i = \delta_i \ast a_i}) = H\bigl(f(\boldsymbol{a}),\, a_i,\, \delta_i\bigr).
+\end{equation}
+Condition (\ref{initialvaluekept}) is equivalent to condition (\ref{transportmap}) quantified over the substitutions that $\Delta_i$ represents: there exists $H_i$ such that $f(\boldsymbol{a}|_{a_i = a_i'}) = H_i(f(\boldsymbol{a}), a_i, a_i')$ for every $\boldsymbol{a} \in S_1 \times \cdots \times S_n$ and every target $a_i' = \delta_i \ast a_i$ with $\delta_i \in \Delta_i$.
+\end{remark}
+
+\noindent \textit{Proof of the equivalence.} ($\Rightarrow$) Given $H$ satisfying (\ref{initialvaluekept}), define $H_i(v, a_i, a_i') := H(v, a_i, \delta_i)$ for any $\delta_i \in \Delta_i$ with $\delta_i \ast a_i = a_i'$. The choice is immaterial: for any $\boldsymbol{a}$ realizing $(v, a_i)$, every representing $\delta_i$ gives $H(v, a_i, \delta_i) = f(\boldsymbol{a}|_{a_i = \delta_i \ast a_i}) = f(\boldsymbol{a}|_{a_i = a_i'})$ --- the substituted tuple depends only on the final value, not on the transform that represents the substitution --- so $H_i$ is well-defined and the restricted condition holds by construction. ($\Leftarrow$) Given $H_i$, set $H(v, a_i, \delta_i) := H_i(v, a_i, \delta_i \ast a_i)$; the target $\delta_i \ast a_i$ is represented by $\delta_i$ itself, so (\ref{initialvaluekept}) holds.
+
+\noindent When every substitution of $a_i'$ for $a_i$ is represented by some transform in $\Delta_i$, the restriction disappears: condition (\ref{initialvaluekept}) is then equivalent to condition (\ref{transportmap}) itself.
+
+
+\begin{remark}[Reach and strictness]
+\label{reachstrictness}
+Deleting the initial value from the pair $(a_i, \delta_i)$ of the preceding remark removes information and nothing else: any transform map serves, through the preceding remark, as a transition map on the substitutions that $\Delta_i$ represents. Transform output-determinacy (Remark~\ref{transformoutputdeterminacy}) therefore implies output-determinacy (Remark~\ref{outputdeterminacy}) over the substitutions that $\Delta_i$ represents. The implication reaches further.
+We write $\overline{\Delta}_i$ for the family of maps of $S_i$ carried out by finitely many transforms in $\Delta_i$ applied in succession, each to the value the previous one produced; a single transform counts as a succession of length one. Each map in $\overline{\Delta}_i$ is itself a transform of $S_i$, so the transform-map condition (\ref{deltatransformmap}) applies with $\overline{\Delta}_i$ in the role of $\Delta_i$.
+\end{remark}
+
+\begin{lemma}[Passage to the closure]
+\label{closurelemma}
+If $s_i$ is transform-independent of the remaining variables $\boldsymbol{s}_{j \neq i}$ and of its own initial value with respect to $f$ and $\Delta_i$, then it is transform-independent of the remaining variables $\boldsymbol{s}_{j \neq i}$ and of its own initial value with respect to $f$ and $\overline{\Delta}_i$: there exists a transform map $H_i^{\overline{\Delta}} \colon f(S_1 \times \cdots \times S_n) \times \overline{\Delta}_i \to T$ (necessarily unique on its declared domain) such that
+\begin{equation}
+\label{closuretransformmap}
+\forall\, \boldsymbol{a} \in S_1 \times \cdots \times S_n,\;\; \forall\, \overline{\delta}_i \in \overline{\Delta}_i \quad
+f(\boldsymbol{a}|_{a_i = \overline{\delta}_i \ast a_i}) = H_i^{\overline{\Delta}}\bigl(f(\boldsymbol{a}),\, \overline{\delta}_i\bigr).
+\end{equation}
+\end{lemma}
+
+\noindent \textit{Proof.} Suppose $H_i^\Delta$ satisfies (\ref{deltatransformmap}). For a tuple $\boldsymbol{a}$ and a succession $\delta_{i,1}, \ldots, \delta_{i,k} \in \Delta_i$, write $a_i^{0} := a_i$ and $a_i^{j} := \delta_{i,j} \ast a_i^{j-1}$ for the values the succession visits, so that a succession carrying out $\overline{\delta}_i \in \overline{\Delta}_i$ ends at $a_i^{k} = \overline{\delta}_i \ast a_i$. The tuple $\boldsymbol{a}|_{a_i = a_i^{j-1}}$ lies in $S_1 \times \cdots \times S_n$ and carries initial value $a_i^{j-1}$, so (\ref{deltatransformmap}) applied to it with $\delta_{i,j}$ gives $f(\boldsymbol{a}|_{a_i = a_i^{j}}) = H_i^\Delta\bigl(f(\boldsymbol{a}|_{a_i = a_i^{j-1}}),\, \delta_{i,j}\bigr)$: each response is again an output of $f$ and feeds the next application, and induction on $j$ gives $f(\boldsymbol{a}|_{a_i = a_i^{k}}) = H_i^\Delta(\cdots H_i^\Delta(f(\boldsymbol{a}),\, \delta_{i,1}) \cdots,\, \delta_{i,k})$ --- a value determined by the output $f(\boldsymbol{a})$ and the succession alone. Now define $H_i^{\overline{\Delta}}(v, \overline{\delta}_i)$ by chaining $H_i^\Delta$ from $v$ along any succession carrying out $\overline{\delta}_i$. The choice is immaterial: every $v$ in the declared domain is realized as $v = f(\boldsymbol{a})$ for some $\boldsymbol{a}$, and two successions carrying out the same map substitute the same value into $\boldsymbol{a}$, so both chains compute the output of the same substituted tuple, $f(\boldsymbol{a}|_{a_i = \overline{\delta}_i \ast a_i})$. Hence $H_i^{\overline{\Delta}}$ is well-defined on its declared domain, and (\ref{closuretransformmap}) holds by construction.
+
+\begin{proposition}[Reach]
+\label{reachproposition}
+Suppose $\overline{\Delta}_i$ represents every substitution of one value for another: for every $a_i, a_i' \in S_i$ with $a_i' \neq a_i$, some $\overline{\delta}_i \in \overline{\Delta}_i$ has $a_i' = \overline{\delta}_i \ast a_i$. If $s_i$ is transform-independent of the remaining variables $\boldsymbol{s}_{j \neq i}$ and of its own initial value with respect to $f$ and $\Delta_i$, then $s_i$ is transition-independent of the remaining variables $\boldsymbol{s}_{j \neq i}$ with respect to $f$.
+\end{proposition}
+
+\noindent \textit{Proof.} Lemma~\ref{closurelemma} yields $H_i^{\overline{\Delta}}$ satisfying (\ref{closuretransformmap}). Through Remark~\ref{keepinitialvalue}, with $\overline{\Delta}_i$ in the role of $\Delta_i$, it serves as a transition map on the substitutions that $\overline{\Delta}_i$ represents: there exists $H_i$ with $f(\boldsymbol{a}|_{a_i = a_i'}) = H_i\bigl(f(\boldsymbol{a}),\, a_i,\, a_i'\bigr)$ for every $\boldsymbol{a}$ and every target $a_i' = \overline{\delta}_i \ast a_i$, $\overline{\delta}_i \in \overline{\Delta}_i$. By hypothesis every target $a_i' \neq a_i$ is of that form; the identity target is free: the substituted tuple is $\boldsymbol{a}$ itself, so setting $H_i(v, a_i, a_i) := v$ satisfies (\ref{transportmap}) there and agrees with any value already forced. Thus $H_i$ is defined on all of $\mathcal{D}_i \times S_i$ and (\ref{transportmap}) holds: $s_i$ is transition-independent of the remaining variables $\boldsymbol{s}_{j \neq i}$ with respect to $f$, and output-determinacy (Remark~\ref{outputdeterminacy}) follows by item (a) of Section~\ref{transitionindependence}.
+
+\newpage
+\begin{corollary}[Represented substitutions]
+\label{representedsubstitutions}
+If $s_i$ is transform-independent of the remaining variables $\boldsymbol{s}_{j \neq i}$ and of its own initial value with respect to $f$ and $\Delta_i$, then there exists $H_i$ such that $f(\boldsymbol{a}|_{a_i = a_i'}) = H_i(f(\boldsymbol{a}), a_i, a_i')$ for every $\boldsymbol{a} \in S_1 \times \cdots \times S_n$ and every target $a_i' = \overline{\delta}_i \ast a_i$ with $\overline{\delta}_i \in \overline{\Delta}_i$ --- condition (\ref{transportmap}) quantified over the substitutions that $\overline{\Delta}_i$ represents.
+\end{corollary}
+
+\noindent \textit{Proof.} Lemma~\ref{closurelemma} yields $H_i^{\overline{\Delta}}$ satisfying (\ref{closuretransformmap}). Through Remark~\ref{keepinitialvalue}, with $\overline{\Delta}_i$ in the role of $\Delta_i$, it serves as a transition map on the substitutions that $\overline{\Delta}_i$ represents.
+
+\noindent Transform independence alone yields the map: no hypothesis on the family enters.
+
+\begin{definition}[Achievability]
+\label{achievability}
+A value $a_i' \in S_i$ is \textit{achievable} from $a_i \in S_i$ with respect to $\Delta_i$ iff $a_i' = a_i$ or some $\overline{\delta}_i \in \overline{\Delta}_i$ has $a_i' = \overline{\delta}_i \ast a_i$: either finitely many transforms in $\Delta_i$ applied in succession carry $a_i$ to $a_i'$, or $a_i'$ is $a_i$ itself. The \textit{achievable set} of $a_i$ is the set of values achievable from $a_i$.
+\end{definition}
+
+\noindent Achievable sets are closed under the transforms: appending one further transform extends a succession. A subset $R \subseteq S_i$ is the achievable set of each of its values iff $R$ is closed under the transforms and every value of $R$ is achievable from every other. The achievable set of a single value meets the first requirement but need not meet the second: a succession may carry $a_i$ to $a_i'$ while no succession carries $a_i'$ back to $a_i$. In this vocabulary, the targets of Corollary~\ref{representedsubstitutions}, together with $a_i$ itself, are exactly the values achievable from $a_i$.
+
+\begin{corollary}[Achievable sets]
+\label{achievablesets}
+Suppose $R \subseteq S_i$ is the achievable set of each of its values. If $s_i$ is transform-independent of the remaining variables $\boldsymbol{s}_{j \neq i}$ and of its own initial value with respect to $f$ and $\Delta_i$, then $s_i$ is transition-independent of the remaining variables $\boldsymbol{s}_{j \neq i}$ with respect to the partial function $f|_{s_i \in R} \colon S_1 \times \cdots \times S_{i-1} \times R \times S_{i+1} \times \cdots \times S_n \to T$ with the $i$-th factor confined to $R$, in the sense of Section~\ref{transitionindependence}.
+\end{corollary}
+
+\noindent \textit{Proof.} The equivalence above unpacks the hypothesis: $R$ is closed under the transforms, and every value of $R$ is achievable from every other. Each $\delta_i \in \Delta_i$ carries $R$ into $R$; write $\delta_i|_R$ for the transform of $R$ it induces, and $\Delta_i|_R$ for the family of these. The partial function agrees with $f$ at every tuple of its domain; by (\ref{deltatransformmap}), any two such tuples sharing an output respond identically to each other under every $\delta_i \in \Delta_i$, and each response is again a value of the partial function: the substituted value $\delta_i|_R \ast a_i = \delta_i \ast a_i$ lies in $R$. Hence transform output-determinacy (Remark~\ref{transformoutputdeterminacy}) holds for $f|_{s_i \in R}$ and $\Delta_i|_R$, and by item (a) of Section~\ref{transformindependence} $s_i$ is transform-independent of the remaining variables $\boldsymbol{s}_{j \neq i}$ and of its own initial value with respect to $f|_{s_i \in R}$ and $\Delta_i|_R$. A succession in $\Delta_i$ starting at a value of $R$ visits only values of $R$, and the induced succession in $\Delta_i|_R$ carries out the same map of $R$; since every value of $R$ is achievable from every other, $\overline{\Delta_i|_R}$ represents every substitution of one value of $R$ for another. Proposition~\ref{reachproposition}, with $f|_{s_i \in R}$ in the role of $f$, $R$ in the role of $S_i$, and $\Delta_i|_R$ in the role of $\Delta_i$, yields the claim: $s_i$ is transition-independent of the remaining variables $\boldsymbol{s}_{j \neq i}$ with respect to $f|_{s_i \in R}$.
+
+\noindent Setting $R = S_i$ recovers Proposition~\ref{reachproposition}: closedness holds trivially, and $\overline{\Delta}_i$ represents every substitution of one value for another iff every value of $S_i$ is achievable from every other.
+
+\newpage
+\begin{remark}[Safe transforms]
+\label{safetransforms}
+Transform independence with respect to a family whose closure represents every substitution of one value for another gives, through Proposition~\ref{reachproposition}, transition independence. Whether some family of transforms of $S_i$ satisfies both of those hypotheses is decided by $f$ alone. Call a transform $\delta_i$ of $S_i$ \textit{safe} for $f$ when every two tuples sharing the same output but not the same initial value respond identically to each other under $\delta_i$: if $f(\boldsymbol{a}) = f(\boldsymbol{b})$ and $a_i \neq b_i$, then $f(\boldsymbol{a}|_{a_i = \delta_i \ast a_i}) = f(\boldsymbol{b}|_{b_i = \delta_i \ast b_i})$. We write $\Delta_i^f$ for the family of all safe transforms of $S_i$. The identity transform of $S_i$ is safe for every $f$: the substituted tuples are $\boldsymbol{a}$ and $\boldsymbol{b}$ themselves.
+\end{remark}
+
+\begin{lemma}[Closure of the safe family]
+\label{safeclosure}
+Suppose $s_i$ is transition-independent of the remaining variables $\boldsymbol{s}_{j \neq i}$ with respect to $f$. Then every map of $S_i$ carried out by finitely many safe transforms applied in succession, each to the value the previous one produced, is itself safe for $f$. With $\Delta_i^f$ in the role of $\Delta_i$ in Remark~\ref{reachstrictness}, the closure $\overline{\Delta}_i$ is $\Delta_i^f$ itself.
+\end{lemma}
+
+\noindent \textit{Proof.} For $\boldsymbol{a}, \boldsymbol{b}$ with $f(\boldsymbol{a}) = f(\boldsymbol{b})$ and $a_i \neq b_i$, and a succession $\delta_{i,1}, \ldots, \delta_{i,k}$ of safe transforms carrying out $\overline{\delta}_i$, write $a_i^{0} := a_i$ and $a_i^{j} := \delta_{i,j} \ast a_i^{j-1}$ for the values the succession visits from $a_i$, and likewise $b_i^{j}$ from $b_i$, so that $a_i^{k} = \overline{\delta}_i \ast a_i$ and $b_i^{k} = \overline{\delta}_i \ast b_i$. The substituted tuples $\boldsymbol{a}|_{a_i = a_i^{j}}$ and $\boldsymbol{b}|_{b_i = b_i^{j}}$ lie in $S_1 \times \cdots \times S_n$, carry initial values $a_i^{j}$ and $b_i^{j}$, and share an output at $j = 0$; sharing survives each step. If $a_i^{j-1} = b_i^{j-1}$, the tuples at $j-1$ share their initial value, and output-determinacy (Remark~\ref{outputdeterminacy}), which holds by item (a) of Section~\ref{transitionindependence}, keeps the outputs equal at the common target $a_i^{j} = b_i^{j}$. If $a_i^{j-1} \neq b_i^{j-1}$, the tuples at $j-1$ share the same output but not the same initial value, and $\delta_{i,j}$ is safe. Induction on $j$ gives $f(\boldsymbol{a}|_{a_i = \overline{\delta}_i \ast a_i}) = f(\boldsymbol{b}|_{b_i = \overline{\delta}_i \ast b_i})$: the map the succession carries out is safe. The closure clause follows: every map in $\overline{\Delta}_i$ is carried out by a succession of safe transforms, and every safe transform lies in $\overline{\Delta}_i$ as a succession of length one.
+
+\begin{lemma}[Families of safe transforms]
+\label{safefamilies}
+Suppose $s_i$ is transition-independent of the remaining variables $\boldsymbol{s}_{j \neq i}$ with respect to $f$. Then $s_i$ is transform-independent of the remaining variables $\boldsymbol{s}_{j \neq i}$ and of its own initial value with respect to $f$ and $\Delta_i$ iff every member of $\Delta_i$ is safe for $f$.
+\end{lemma}
+
+\noindent \textit{Proof.} ($\Rightarrow$) If $H_i^\Delta$ satisfies (\ref{deltatransformmap}), then for $f(\boldsymbol{a}) = f(\boldsymbol{b})$ with $a_i \neq b_i$ and any $\delta_i \in \Delta_i$, $f(\boldsymbol{a}|_{a_i = \delta_i \ast a_i}) = H_i^\Delta(f(\boldsymbol{a}), \delta_i) = H_i^\Delta(f(\boldsymbol{b}), \delta_i) = f(\boldsymbol{b}|_{b_i = \delta_i \ast b_i})$: every member is safe. ($\Leftarrow$) Suppose every member of $\Delta_i$ is safe, and let $f(\boldsymbol{a}) = f(\boldsymbol{b})$ with $\delta_i \in \Delta_i$. If $a_i = b_i$, then $\delta_i \ast a_i = \delta_i \ast b_i$, and output-determinacy (Remark~\ref{outputdeterminacy}), which holds by item (a) of Section~\ref{transitionindependence}, keeps the outputs equal at that common target; if $a_i \neq b_i$, $\delta_i$ is safe. Transform output-determinacy (Remark~\ref{transformoutputdeterminacy}) therefore holds, and $s_i$ is transform-independent of the remaining variables $\boldsymbol{s}_{j \neq i}$ and of its own initial value with respect to $f$ and $\Delta_i$ by item (a) of Section~\ref{transformindependence}.
+
+\begin{proposition}[Reach of the safe family]
+\label{safereach}
+Suppose $s_i$ is transition-independent of the remaining variables $\boldsymbol{s}_{j \neq i}$ with respect to $f$. Then $s_i$ is transform-independent of the remaining variables $\boldsymbol{s}_{j \neq i}$ and of its own initial value with respect to $f$ and some family $\Delta_i$ of transforms of $S_i$ satisfying the hypothesis of Proposition~\ref{reachproposition} --- its closure $\overline{\Delta}_i$ represents every substitution of one value for another --- iff the safe family $\Delta_i^f$ itself represents every substitution of one value for another. In that case $\Delta_i^f$ is such a family.
+\end{proposition}
+
+\noindent \textit{Proof.} ($\Rightarrow$) Let $\Delta_i$ be such a family: every member is safe (Lemma~\ref{safefamilies}), and every map in $\overline{\Delta}_i$ is carried out by finitely many members applied in succession, hence is itself safe (Lemma~\ref{safeclosure}). Every substitution of one value for another is represented by some map in $\overline{\Delta}_i$, hence by a safe transform: $\Delta_i^f$ represents every substitution of one value for another. ($\Leftarrow$) Take $\Delta_i^f$ in the role of $\Delta_i$ --- this also proves the closing assertion. Every member of $\Delta_i^f$ is safe, so $s_i$ is transform-independent of the remaining variables $\boldsymbol{s}_{j \neq i}$ and of its own initial value with respect to $f$ and $\Delta_i^f$ (Lemma~\ref{safefamilies}); the closure of $\Delta_i^f$ is $\Delta_i^f$ itself (Lemma~\ref{safeclosure}), and it represents every substitution of one value for another by hypothesis.
+
+\begin{corollary}[Strictness]
+\label{strictness}
+Suppose $s_i$ is transition-independent of the remaining variables $\boldsymbol{s}_{j \neq i}$ with respect to $f$, and let $\Delta_i$ be a family of transforms of $S_i$ satisfying the hypothesis of Proposition~\ref{reachproposition}. The implication of Proposition~\ref{reachproposition} is strict at $f$ and $\Delta_i$ --- $s_i$ is transition-independent of the remaining variables $\boldsymbol{s}_{j \neq i}$ with respect to $f$, yet not transform-independent of the remaining variables $\boldsymbol{s}_{j \neq i}$ and of its own initial value with respect to $f$ and $\Delta_i$ --- iff some member of $\Delta_i$ is not safe for $f$.
+\end{corollary}
+
+\noindent \textit{Proof.} Lemma~\ref{safefamilies}: transform independence with respect to $f$ and $\Delta_i$ holds iff every member of $\Delta_i$ is safe for $f$; strictness at $f$ and $\Delta_i$ is exactly its failure.
+
+\begin{remark}[Assignments]
+\label{assignments}
+For each value $c \in S_i$, the \textit{assignment} to $c$ is the transform of $S_i$ carrying every value to $c$. The assignment family represents every substitution of one value for another (the substitution of $a_i'$ for $a_i$ is represented by the assignment to $a_i'$), and a succession of assignments carries out its last member, so the family is its own closure. Suppose $s_i$ is transition-independent of the remaining variables $\boldsymbol{s}_{j \neq i}$ with respect to $f$. By Lemma~\ref{safefamilies}, $s_i$ is transform-independent of the remaining variables $\boldsymbol{s}_{j \neq i}$ and of its own initial value with respect to $f$ and the assignment family iff every assignment is safe for $f$ --- iff $f(\boldsymbol{a}|_{a_i = c})$ is determined by $(f(\boldsymbol{a}),\, c)$ alone. If every assignment is safe, the assignment family lies inside $\Delta_i^f$, and $\Delta_i^f$ then represents every substitution of one value for another; the reverse implication need not hold.
+\end{remark}
+
+\begin{remark}[Determination of the initial value]
+\label{valuedetermination}
+Suppose $s_i$ is transition-independent of the remaining variables $\boldsymbol{s}_{j \neq i}$ with respect to $f$, and suppose the output determines the initial value: $f(\boldsymbol{a}) = f(\boldsymbol{b})$ only when $a_i = b_i$. Then two tuples sharing the same output share the same initial value, every transform of $S_i$ is safe for $f$, and $s_i$ is transform-independent of the remaining variables $\boldsymbol{s}_{j \neq i}$ and of its own initial value with respect to $f$ and every family $\Delta_i$ of transforms of $S_i$ (Lemma~\ref{safefamilies}), whether or not its closure represents every substitution of one value for another.
+\end{remark}
+
+\begin{remark}[Equivariance form]
+\label{equivarianceform}
+For $\delta_i \in \Delta_i$, we write $\hat{\delta}_i$ for the map $\boldsymbol{a} \mapsto \boldsymbol{a}|_{a_i = \delta_i \ast a_i}$ on $S_1 \times \cdots \times S_n$, which applies $\delta_i$ to the $i$-th coordinate and leaves the remaining coordinates unchanged. Condition (\ref{deltatransformmap}) is then the intertwining identity
+\[
+f \circ \hat{\delta}_i = \rho(\delta_i) \circ f, \qquad \rho(\delta_i) \coloneqq H_i^\Delta(\,\cdot\,, \delta_i).
+\]
+Equivariance in the usual sense supplies actions on both sides and asks $f$ to intertwine them; here only the domain side is given, and the codomain family $\rho$ is quantified existentially. Transform output-determinacy (Remark~\ref{transformoutputdeterminacy}) says exactly that the level sets of $f$ form a congruence for each $\hat{\delta}_i$: each level set is carried into a single level set, in general a different one. Each $\hat{\delta}_i$ therefore descends along $f$ to $\rho(\delta_i)$, a self-map of the range of $f$, unique there because its values are forced. Composites descend as well. Since $\widehat{\delta_i' \circ \delta_i} = \hat{\delta}_i' \circ \hat{\delta}_i$ and the induced maps are forced, $\rho(\delta_i' \circ \delta_i) = \rho(\delta_i') \circ \rho(\delta_i)$, whether or not $\delta_i' \circ \delta_i$ lies in $\Delta_i$. So $\rho$ extends to an action of the closure $\overline{\Delta}_i$ on the range of $f$: equivariance on the generators is equivariance on the generated semigroup --- the induction behind Lemma~\ref{closurelemma}. Under standard names, $f$ is a \textit{semiconjugacy}, or \textit{factor map}, onto its image, and the descent along $f$ is the \textit{deterministic lumpability} of the level-set partition, also known as \textit{exact aggregation}.
+\end{remark}
+
+\newpage
+
+\section{Transform-Context}
+\label{transformcontext}
+\paragraph{Setting.} Transform independence may be partial in the same way: $s_i$ might be transform-independent of some variables and of its own initial value, with the others retained as its context. We partition $\{1, \ldots, n\}$ as $\{i\} \cup J \cup K$ as in Section~\ref{contextbases}, with $J$ the context and $K$ the remaining variables. The variable $s_i$ is \textit{transform-independent of $\boldsymbol{s}_K$ and of its own initial value given context $\boldsymbol{s}_J$}, with respect to $f$ and $\Delta_i$, if the conditions of Section~\ref{transformindependence} hold when the auxiliary maps are allowed to depend on the context values $\boldsymbol{a}_J$. The family is unchanged: only the maps consult the context.
+
+\paragraph{Transform-map formulation (no structure on $T$).} The variable $s_i$ is transform-independent of $\boldsymbol{s}_K$ and of its own initial value given context $\boldsymbol{s}_J$, with respect to $f$ and $\Delta_i$, iff there exists a map $H_{i,J}^\Delta \colon \mathcal{E}_i^J \to T$ (denoted $H_{i,J}^\Delta(f(\boldsymbol{a}), \delta_i, \boldsymbol{a}_J)$, the transform written before the context) such that
+\begin{equation}
+\label{contextdeltatransformmap}
+\forall\, \boldsymbol{a} \in S_1 \times \cdots \times S_n,\;\; \forall\, \delta_i \in \Delta_i \quad
+f(\boldsymbol{a}|_{a_i = \delta_i \ast a_i}) = H_{i,J}^\Delta\bigl(f(\boldsymbol{a}),\, \delta_i,\, \boldsymbol{a}_J\bigr),
+\end{equation}
+where $\mathcal{E}_i^J \coloneqq \{(f(\boldsymbol{a}),\, \boldsymbol{a}_J) : \boldsymbol{a} \in S_1 \times \cdots \times S_n\} \times \Delta_i$ --- the transform still constrains nothing, being chosen independently of $\boldsymbol{a}$, while the output and the context may constrain each other. Setting $J = \emptyset$ recovers (\ref{deltatransformmap}); setting $J = \{1, \ldots, n\} \setminus \{i\}$ does not hold trivially: the map consults the transform and every remaining coordinate, still not the initial value the transform acts on.
+
+\begin{remark}[Transform output-determinacy on context $J$]
+\label{contexttransformoutputdeterminacy}
+For every $\boldsymbol{a}, \boldsymbol{b} \in S_1 \times \cdots \times S_n$, if $f(\boldsymbol{a}) = f(\boldsymbol{b})$ and $\boldsymbol{a}_J = \boldsymbol{b}_J$, then $f(\boldsymbol{a}|_{a_i = \delta_i \ast a_i}) = f(\boldsymbol{b}|_{b_i = \delta_i \ast b_i})$ for every $\delta_i \in \Delta_i$.
+\end{remark}
+
+\noindent As in the full case, transform output-determinacy on context $J$ is necessary and sufficient for $H_{i,J}^\Delta$ to be well-defined on $\mathcal{E}_i^J$. Setting $J = \emptyset$ recovers Remark~\ref{transformoutputdeterminacy}. Geometrically, this is still the descent of Section~\ref{transformindependence}, now within each context slice: with $\boldsymbol{s}_J$ fixed, applying a transform carries every level set of the partial function into a single level set --- in general a different one.
+
+\begin{remark}[Partial-function form]
+\label{transformcontextpartialform}
+For every $\boldsymbol{c}_J \in \prod_{j \in J} S_j$, the variable $s_i$ is fully transform-independent of the remaining variables and of its own initial value on the partial function $f|_{\boldsymbol{s}_J = \boldsymbol{c}_J} \colon \prod_{m \in \{i\} \cup K} S_m \to T$, with respect to the same family $\Delta_i$, in the sense of Section~\ref{transformindependence}.
+\end{remark}
+
+\noindent Remark~\ref{transformcontextpartialform} is equivalent to $s_i$ being transform-independent of $\boldsymbol{s}_K$ and of its own initial value given context $\boldsymbol{s}_J$: since $\boldsymbol{a}|_{a_i = \delta_i \ast a_i}$ fixes $\boldsymbol{a}_J$, the map $H_{i,J}^\Delta(\,\cdot\,,\, \cdot\,,\, \boldsymbol{c}_J)$ is the transform map of $f|_{\boldsymbol{s}_J = \boldsymbol{c}_J}$. Partial transform independence is full transform independence on sets of partial functions, the family shared across them; context is what's fixed.
+
+\paragraph{Finite-difference formulation (abelian $T$).} When $(T, +)$ is an abelian group, the condition has the equivalent algebraic form: there exists $G_{i,J}^\Delta \colon \mathcal{E}_i^J \to T$ such that
+\begin{equation}
+\label{contexttransformfinitedifference}
+\forall\, \boldsymbol{a} \in S_1 \times \cdots \times S_n,\;\; \forall\, \delta_i \in \Delta_i \quad
+f(\boldsymbol{a}|_{a_i = \delta_i \ast a_i}) - f(\boldsymbol{a}) = G_{i,J}^\Delta\bigl(f(\boldsymbol{a}),\, \delta_i,\, \boldsymbol{a}_J\bigr).
+\end{equation}
+The relationships between (\ref{contextdeltatransformmap}) and (\ref{contexttransformfinitedifference}) parallel items (a) and (b) of Section~\ref{transformindependence}, with the context tuple $\boldsymbol{a}_J$ entering each map as a passenger argument: the formulations are related by $G_{i,J}^\Delta(v, \delta_i, \boldsymbol{a}_J) = H_{i,J}^\Delta(v, \delta_i, \boldsymbol{a}_J) - v$ and $H_{i,J}^\Delta(v, \delta_i, \boldsymbol{a}_J) = v + G_{i,J}^\Delta(v, \delta_i, \boldsymbol{a}_J)$, and no derivative formulation is included.
+
+\paragraph{The apparatus under context.} Every result of Section~\ref{transformindependence} applies within each context slice through the partial-function form, with $f|_{\boldsymbol{s}_J = \boldsymbol{c}_J}$ in the role of $f$: each is proved for a function on a total product of factor sets, and each partial function is one. Remark~\ref{keepinitialvalue} converts the slice's transform map into a transition map on the substitutions the family represents. The closure $\overline{\Delta}_i$ of Remark~\ref{reachstrictness}, Lemma~\ref{closurelemma}, and Proposition~\ref{reachproposition} apply per slice with one and the same closure: the closure and the reach hypothesis consult $S_i$ and $\Delta_i$ alone, so a single hypothesis serves every slice at once. Read back through Remark~\ref{contextpartialform}, the slice conclusions reassemble into context statements: under the hypothesis of Proposition~\ref{reachproposition}, if $s_i$ is transform-independent of $\boldsymbol{s}_K$ and of its own initial value given context $\boldsymbol{s}_J$ with respect to $f$ and $\Delta_i$, then $s_i$ is transition-independent of $\boldsymbol{s}_K$ given context $\boldsymbol{s}_J$ with respect to $f$. Corollary~\ref{representedsubstitutions}, Definition~\ref{achievability}, and Corollary~\ref{achievablesets} apply per slice verbatim, achievability being likewise independent of the context. The safe transforms of Remark~\ref{safetransforms} are read per slice --- a transform safe for one partial function need not be safe for another --- and Lemma~\ref{safeclosure}, Lemma~\ref{safefamilies}, Proposition~\ref{safereach}, Corollary~\ref{strictness}, and Remarks~\ref{assignments} and~\ref{valuedetermination} hold in each slice so read. Remark~\ref{equivarianceform} reads likewise, with $\rho$ acting on the range of the partial function.
+
+
+\newpage
+
+\section{Contextual Order}
+\label{contextualorder}
+
+\paragraph{Setting.} The inputs $s_1, \ldots, s_n$ are \textit{contextually ordered} with respect to $f$ iff for every $i$, the variable $s_i$ is transition-independent of $\boldsymbol{s}_{\{1, \ldots, i-1\}}$ given context $\boldsymbol{s}_{\{i+1, \ldots, n\}}$, in the sense of Section~\ref{contextbases}: the tuple $(f(\boldsymbol{a}),\, a_i,\, \boldsymbol{a}_{\{i+1, \ldots, n\}})$ is a sufficient representation for predicting how $f$ responds to movement of $s_i$. The contexts nest and shrink along the order. At $i = n$ the context is empty and the condition is transition independence in the sense of Section~\ref{transitionindependence}: $s_n$ is transition-independent of the remaining variables $\boldsymbol{s}_{j \neq n}$ with respect to $f$. At $i = 1$ the condition holds trivially. The property is of the ordering as given; when some reordering of the inputs is contextually ordered, the inputs are \textit{contextually orderable}.
+
+\begin{remark}[Adjacent grouping]
+\label{adjacentgrouping}
+Grouping adjacent variables preserves contextual order: partition the indices into consecutive blocks and read $f$ on the product of the block products, each block tuple a single variable --- the block tuples are contextually ordered with respect to $f$ so read. Substituting a block from its last variable to its first, each step's context --- the remainder of its own block, already substituted, and the later blocks --- stands at values shared by any two tuples the substitution must reconcile, so output-determinacy on the context (Remark~\ref{contextoutputdeterminacy}) carries equality of outputs through every step, and the composite response is determined by the output, the block's values, and the later blocks' values alone. In particular, split in two: for $\{s_1, \ldots, s_m\}$ and $\{s_{m+1}, \ldots, s_n\}$, the latter tuple $\boldsymbol{s}_{\{m+1, \ldots, n\}}$ is transition-independent of $\boldsymbol{s}_{\{1, \ldots, m\}}$ with respect to $f$ so read. The preservation is one-way: the grouped order returns each variable's condition only with the other variables of its block as added context, and the unconditional independence of the last variable is exactly what a coarser order does not recover.
+\end{remark}
+
+\end{document}
