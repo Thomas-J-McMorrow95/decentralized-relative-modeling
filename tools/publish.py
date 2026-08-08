@@ -420,7 +420,9 @@ def stamp_assets():
         page = ROOT / name
         if not page.exists():
             continue
-        text = page.read_text(encoding="utf-8")
+        data = page.read_bytes()
+        crlf = b"\r\n" in data
+        text = data.decode("utf-8").replace("\r\n", "\n")
 
         def stamp(m):
             asset = ROOT / m.group(2)
@@ -431,7 +433,13 @@ def stamp_assets():
 
         stamped = STAMPABLE.sub(stamp, text)
         if stamped != text:
-            page.write_text(stamped, encoding="utf-8")
+            # Write the line endings the file already had. Left to itself,
+            # Python would use the ending of whatever machine is running,
+            # which on a non-Windows host rewrites every line of the page.
+            out = stamped.encode("utf-8")
+            if crlf:
+                out = out.replace(b"\n", b"\r\n")
+            page.write_bytes(out)
             touched.append(name)
 
     if touched:

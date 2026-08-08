@@ -2,3 +2,4 @@
 *.aux
 *.out
 *.gz
+__pycache__/

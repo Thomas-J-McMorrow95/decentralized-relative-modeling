@@ -37,6 +37,12 @@ Consequence for editing: read and write as bytes and preserve CRLF. A
 whole-file rewrite with LF endings looks like a real change and buries the
 actual edit in thousands of phantom lines.
 
+`stamp_assets()` in publish.py handles this correctly: it reads bytes and
+writes back whatever endings the file already had. `write_manifest()` does
+not. It uses `write_text`, which follows the host's convention, so running it
+from the Linux side would silently convert `docs/manifest.js` to LF. It is
+only reached when a PDF is added or removed, which the user does on Windows.
+
 ## GitHub Pages caching
 
 Assets are served with `Cache-Control: max-age=600`. Before the cache stamps
